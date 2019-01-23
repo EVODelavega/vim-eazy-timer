@@ -7,40 +7,61 @@ let g:loaded_etimer = 1
 
 let s:timer_callback = get(g:, 'etimer_callback', 'NotifyTimer')
 
+let s:factors = {
+            \"ms": 1,
+            \"s": 1000,
+            \"m": 60 * 1000,
+            \"h": 60 * 60 * 1000,
+            \}
+let s:active_timers = {}
+
 function NotifyTimer(timer_id)
+    let l:timer_interval = remove(s:active_timers, a:timer_id)
     call timer_stop(a:timer_id)
-    echom "Timer expired!"
+    echom printf("Timer %d (%s) expired!", a:timer_id, l:timer_interval)
 endfunction
 
 function! s:start_timer(i)
+    let l:interval = s:parse_interval(a:i)
+    if l:interval == -1
+        return -1
+    endif
+    let l:timer = timer_start(l:interval, s:timer_callback)
+    let s:active_timers[l:timer] = a:i
+    echo printf("Timer %d set", l:timer)
+endfunction
+
+function s:parse_interval(i)
+    if a:i!~#"[smh]$"
+        echoerr printf("Invalid interval %s, expected format \d+(ms|s|m|h)$", a:i)
+        return -1
+    endif
     let l:len = strlen(trim(a:i))
     let l:unit_idx = 1
-    " check if unit of time is specified
-    if a:i!~#"[smh]$"
-        echom "Invalid interval (format \d+(s|m|h|ms))"
-        return 1
-    endif
     if a:i=~#"ms$"
         let l:unit_idx = 2
     endif
-    " split stirng into unit and count respectively
     let l:split_idx = l:len - l:unit_idx
     let l:unit = strpart(a:i, l:split_idx, l:unit_idx)
     let l:interval = str2nr(strpart(a:i, 0, l:split_idx))
-    if l:unit != "ms"
-        let l:interval = l:interval * 1000
-        " this multiplies for both minutes and hours
-        if l:unit != "s"
-            let l:interval = l:interval * 60
-        endif
-        if l:unit == "h"
-            let l:interval = l:interval * 60
-        endif
-    endif
-    let l:timer = timer_start(l:interval, s:timer_callback)
-    echo "Timer set"
+    let l:interval = l:interval * get(s:factors, l:unit, 1)
+    return l:interval
+endfunction
+
+function s:list_timers()
+    for key in keys(s:active_timers)
+        echo printf("%d -> %s", key, s:active_timers[key])
+    endfor
+endfunction
+
+function s:cancel_timers()
+    let s:active_timers = {}
+    call timer_stopall()
 endfunction
 
 " Register relevant commands
-command! -nargs=1 ETimer call s:start_timer(<q-args>)
-command! -nargs=0 ETCancel call timer_stopall()
+function! timer#register()
+    command! -nargs=1 ETimer call s:start_timer(<q-args>)
+    command! -nargs=0 ETCancel call s:cancel_timers()
+    command! -nargs=0 ETList call s:list_timers()
+endfunction
