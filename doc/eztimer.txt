@@ -27,9 +27,9 @@ EZTimer provides three simple commands to set, list, and cancel timers.
 * :ETList 				Lists all set timers
 * :ETCancel [<ID>]		Cancel a timer by ID, or all timers if ID is omitted.
 * :ETimer <format>		Sets a timer for 'format' period of time. The format
-                        is expected to match `\d+(ms|s|m|h)`. To set a timer
-                        for one and a half hours, `:ETimer 90m`, a timer for
-                        two hours: `:ETimer 2h` or `:ETimer 120m`.
+						is expected to match `\d+(ms|s|m|h)`. To set a timer
+						for one and a half hours, `:ETimer 90m`, a timer for
+						two hours: `:ETimer 2h` or `:ETimer 120m`.
 
 
 ==============================================================================
@@ -38,7 +38,7 @@ CONFIGURATION                                           *EZTimerConfiguration*
 The default behaviour when a timer expires is to simply `echom` a message. To
 change the default behaviour, you can set a custom callback:
 
-    let g:etimer_callback = 'MyCallback'
+	let g:etimer_callback = 'MyCallback'
 
 The callback takse one argument (timer ID), which still needs to be stopped.
 

@@ -55,13 +55,13 @@ function s:list_timers()
 endfunction
 
 function s:cancel_timers(...)
-    if a:0 == 1
+    if len(a:000) == 1
         let l:timer_id = str2nr(a:1)
         if !has_key(s:active_timers, l:timer_id)
             echom printf("Timer ID %s not found", a:1)
             return
         endif
-        remove(s:active_timers, l:timer_id)
+        call remove(s:active_timers, l:timer_id)
         call timer_stop(l:timer_id)
         return
     endif
@@ -72,6 +72,6 @@ endfunction
 " Register relevant commands
 function! timer#register()
     command! -nargs=1 ETimer call s:start_timer(<q-args>)
-    command! -nargs=? ETCancel call s:cancel_timers()
+    command! -nargs=? ETCancel call s:cancel_timers(<f-args>)
     command! -nargs=0 ETList call s:list_timers()
 endfunction
