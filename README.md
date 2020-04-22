@@ -44,6 +44,5 @@ Will output something like:
 ### TODO's
 
 - Add information on when the listed timers were set, seeing how much time is left
-- Support cancelling specific timers
 - Allowing `ETimer` to take a second argument for a specific callback
 - Make `ETimer` take `-nargs=+` args, so we can set several timers at once
