@@ -1,0 +1,55 @@
+*eztimer.txt* a simple timer plugin for vim
+
+
+
+==============================================================================
+CONTENTS                                                     *EZTimerContents*
+
+  1. Introduction ............ |EZTimerIntroduction|
+  2. Commands ................ |EZTimerCommands|
+  3. Configuration ........... |EZTimerConfiguration|
+  4. TODOs ................... |EZTimerTODOS|
+
+==============================================================================
+INTRODUCTION                                             *EZTimerIntroduction*
+
+A basic plugin to quickly set up one or more timers using human-friendly input
+formats.
+
+By default, expired timers will just `echom` a message, but a custom callback
+can be configured.
+
+===============================================================================
+COMMANDS                                                      *EZTimerCommands*
+
+EZTimer provides three simple commands to set, list, and cancel timers.
+
+* :ETList 				Lists all set timers
+* :ETCancel [<ID>]		Cancel a timer by ID, or all timers if ID is omitted.
+* :ETimer <format>		Sets a timer for 'format' period of time. The format
+                        is expected to match `\d+(ms|s|m|h)`. To set a timer
+                        for one and a half hours, `:ETimer 90m`, a timer for
+                        two hours: `:ETimer 2h` or `:ETimer 120m`.
+
+
+==============================================================================
+CONFIGURATION                                           *EZTimerConfiguration*
+
+The default behaviour when a timer expires is to simply `echom` a message. To
+change the default behaviour, you can set a custom callback:
+
+    let g:etimer_callback = 'MyCallback'
+
+The callback takse one argument (timer ID), which still needs to be stopped.
+
+==============================================================================
+TODOS                                                           *EZTimerTODOS*
+
+EZTimer is far from complete. The main things left to do are:
+
+* Change the `ETimer` command to support formats like `1h15m30s`
+* Use `ETimer` to create labeled timers (instead of timer ID's)
+* Support setting several timers at once (`:ETimer 1h 2h 3h`)
+* Repeat timers (using `timer_start` options)
+* Make default notification for expired timers more obvious
+* Wrap custom callback to ensure timers are stopped properly
