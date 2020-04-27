@@ -24,6 +24,8 @@ COMMANDS                                                      *EZTimerCommands*
 
 EZTimer provides three simple commands to set, list, and cancel timers.
 
+* :ETStart				Starts the stopwatch (default inteval 1s)
+* :ETStop				Stops the stopwatch and displays how long it ran
 * :ETList 				Lists all set timers
 * :ETCancel [<ID>]		Cancel a timer by ID, or all timers if ID is omitted.
 * :ETimer <format>		Sets a timer for 'format' period of time. The format
@@ -41,6 +43,13 @@ change the default behaviour, you can set a custom callback:
 	let g:etimer_callback = 'MyCallback'
 
 The callback takse one argument (timer ID), which still needs to be stopped.
+
+The default stopwatch precision/interval is 1s. To change this, you can set
+
+	let g:etimer_stopwatch_interval = '10s'
+
+where the value is in the format `\d+(ms|s|m|h)`. Regardless of the format
+used, seconds are traced using `localtime()`.
 
 ==============================================================================
 TODOS                                                           *EZTimerTODOS*
