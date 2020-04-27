@@ -14,7 +14,9 @@ let s:stopwatch_start = 0
 function NotifyTimer(timer_id)
     let l:timer_interval = remove(s:active_timers, a:timer_id)
     call timer_stop(a:timer_id)
+    echohl ErrorMsg
     echom printf("Timer %d (%s) expired!", a:timer_id, l:timer_interval)
+    echohl None
 endfunction
 
 function! s:start_timer(i)
@@ -24,7 +26,9 @@ function! s:start_timer(i)
     endif
     let l:timer = timer_start(l:interval, get(g:, 'etimer_callback', 'NotifyTimer'))
     let s:active_timers[l:timer] = a:i
+    echohl WarningMsg
     echo printf("Timer %d set", l:timer)
+    echohl None
 endfunction
 
 function s:parse_interval(i)
@@ -45,9 +49,11 @@ function s:parse_interval(i)
 endfunction
 
 function s:list_timers()
+    echohl ModeMsg
     for key in keys(s:active_timers)
         echo printf("%d -> %s", key, s:active_timers[key])
     endfor
+    echohl None
 endfunction
 
 function s:cancel_timers(...)
