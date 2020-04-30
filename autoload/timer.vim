@@ -98,24 +98,15 @@ function s:stop_stopwatch()
     endif
     call timer_stop(s:stopwatch_id)
     let s:stopwatch_id = 0
+    let s:stopwatch_time += localtime() - s:stopwatch_start
+    let s:stopwatch_start = 0
     let l:hours = s:stopwatch_time / get(s:factors, 'h', 3600000)
     let s:stopwatch_time -= l:hours * get(s:factors, 'h', 3600000)
     let l:minutes = s:stopwatch_time / get(s:factors, 'm', 60000)
     let s:stopwatch_time -= l:minutes * get(s:factors, 'm', 60000)
     let l:seconds = s:stopwatch_time / get(s:factors, 's', 1000)
     let l:ms = s:stopwatch_time - l:seconds * get(s:factors, 's', 1000)
-    let l:seconds += localtime() - s:stopwatch_start
-    "" Add the extra seconds, update mins/seconds if needed
-    if l:seconds > 60
-        let l:minutes += l:seconds/60
-        let l:seconds = fmod(l:seconds, 60)
-        if l:minutes > 60
-            l:hours += l:minutes / 60
-            l:minutes = fmod(l:minutes/60)
-        endif
-    endif
     let s:stopwatch_time = 0
-    let s:stopwatch_start = 0
     echom printf("Stopwatch ended after %dh %dm %ds %dms", l:hours, l:minutes, l:seconds, l:ms)
 endfunction
 
