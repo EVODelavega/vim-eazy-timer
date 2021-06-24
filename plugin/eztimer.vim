@@ -4,6 +4,11 @@ if exists('g:loaded_etimer')
     finish
 endif
 let g:loaded_etimer = 1
+let s:keepcpo = &cpo
+set cpo&vim
 
 " Register the commands
-call timer#Register()
+call timer#RegisterCommands()
+
+let &cpo= s:keepcpo
+unlet s:keepcpo

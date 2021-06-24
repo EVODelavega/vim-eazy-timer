@@ -122,7 +122,7 @@ function s:stopall()
 endfunction
 
 " Register relevant commands
-function! timer#Register()
+function! timer#RegisterCommands()
     command! -nargs=1 ETimer call s:start_timer(<q-args>)
     command! -nargs=? ETCancel call s:cancel_timers(<f-args>)
     command! -nargs=0 ETList call s:list_timers()
